@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{funcionarioBean.carregarPesquisa}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form>
+			<p:dataTable id="tblFun" emptyMessage="Nenhum registro encontrado"
+				value="#{funcionarioBean.listaFuncionarios}"
+				filteredValue="#{funcionarioBean.listaFunFiltrados}"
+				var="funcionario" paginator="true" rows="8"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}">
+				
+				<f:facet name="{Exporters}">
+
+					<h:commandLink>
+						<p:graphicImage library="images" name="excel.png" />
+						<p:dataExporter type="xls" target="tblFun"
+							fileName="Funcionários" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<p:graphicImage library="images" name="pdf.png" width="24" />
+						<p:dataExporter type="pdf" target="tblFun"
+							fileName="Funcionários" encoding="ISO-8859-1"/>
+					</h:commandLink>
+
+				</f:facet>
+				
+				<f:facet name="footer">
+					<p:button value="Novo Funcionario"
+						outcome="/pages/funcionarioCadastro.xhtml?faces-redirect=true">
+					</p:button>
+				</f:facet>
+				<p:column headerText="Código" style="width: 6%">
+					<h:outputText value="#{funcionario.codigo}" />
+
+				</p:column>
+
+				<p:column headerText="Nome" filterBy="#{funcionario.nome}"
+					sortBy="#{funcionario.nome}">
+					<h:outputText value="#{funcionario.nome}" />
+				</p:column>
+
+				<p:column headerText="Cpf" filterBy="#{funcionario.cpf}"
+					sortBy="#{funcionario.cpf}" style="width: 18%">
+					<h:outputText value="#{funcionario.cpf}" />
+				</p:column>
+
+				<p:column headerText="Função" filterBy="#{funcionario.funcao}"
+					sortBy="#{funcionario.funcao}" style="width: 18%">
+					<h:outputText value="#{funcionario.funcao}" />
+				</p:column>
+
+				<p:column headerText="Opções" exportable="false">
+					<p:commandButton value="Excluir"
+						action="#{funcionarioBean.carregarObjeto(funcionario, 'Excluir')}" />
+					<p:commandButton value="Alterar"
+						action="#{funcionarioBean.carregarObjeto(funcionario, 'Editar')}" />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
